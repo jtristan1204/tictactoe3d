@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qubic — Tic Tac Toe 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="scene" aria-hidden="true">
+  <div class="scene-grid"></div>
+</div>
+
+<!-- ================= LOBBY ================= -->
+<main id="lobby" class="screen lobby">
+  <header class="brand">
+    <span class="brand-mark">4×4×4</span>
+    <h1>Qubic<span class="brand-dot">·</span>3D</h1>
+    <p class="brand-sub">Tic&nbsp;tac&nbsp;toe en un cubo. Cuatro capas, setenta y seis formas de ganar.</p>
+  </header>
+
+  <div class="lobby-cards">
+    <section class="card">
+      <h2><span class="idx">01</span> Crear sala</h2>
+      <label class="field">
+        <span>Tu nombre</span>
+        <input id="create-name" type="text" maxlength="20" placeholder="Jugador 1" autocomplete="off">
+      </label>
+      <button id="btn-create" class="btn btn-primary">Crear sala nueva</button>
+      <p class="hint">Se genera un codigo de 4 caracteres para invitar a alguien.</p>
+    </section>
+
+    <div class="divider"><span>o</span></div>
+
+    <section class="card">
+      <h2><span class="idx">02</span> Unirse a una sala</h2>
+      <label class="field">
+        <span>Tu nombre</span>
+        <input id="join-name" type="text" maxlength="20" placeholder="Jugador 2" autocomplete="off">
+      </label>
+      <label class="field">
+        <span>Codigo de sala</span>
+        <input id="join-code" type="text" maxlength="4" placeholder="AB3K" autocomplete="off" style="text-transform:uppercase; letter-spacing:0.3em; font-family:'JetBrains Mono',monospace;">
+      </label>
+      <button id="btn-join" class="btn btn-secondary">Unirme</button>
+    </section>
+  </div>
+
+  <p id="lobby-error" class="error-msg" hidden></p>
+</main>
+
+<!-- ================= GAME ================= -->
+<main id="game" class="screen game" hidden>
+  <header class="game-header">
+    <div class="room-tag">
+      <span class="room-label">Sala</span>
+      <span id="room-code" class="room-code">----</span>
+      <button id="btn-copy" class="btn-copy" title="Copiar codigo">copiar</button>
+    </div>
+
+    <div id="turn-indicator" class="turn-indicator">
+      <span class="turn-dot" id="turn-dot"></span>
+      <span id="turn-text">Esperando rival…</span>
+    </div>
+
+    <div class="players">
+      <div class="player-chip" id="chip-x">
+        <span class="chip-symbol sym-x">X</span>
+        <span class="chip-name" id="name-x">—</span>
+      </div>
+      <div class="player-chip" id="chip-o">
+        <span class="chip-symbol sym-o">O</span>
+        <span class="chip-name" id="name-o">—</span>
+      </div>
+    </div>
+
+    <button id="btn-leave" class="btn btn-ghost">Salir</button>
+  </header>
+
+  <p class="you-are">Estas jugando como <strong id="you-symbol">X</strong> · <span id="coord-readout">clic en una celda para jugar</span></p>
+
+  <div id="layers" class="layers"></div>
+
+  <div id="overlay" class="overlay" hidden>
+    <div class="overlay-card">
+      <p id="overlay-title" class="overlay-title">¡X gano!</p>
+      <p id="overlay-sub" class="overlay-sub">Las cuatro fichas alineadas en el espacio.</p>
+      <div class="overlay-actions">
+        <button id="btn-rematch" class="btn btn-primary">Pedir revancha</button>
+        <span id="rematch-status" class="rematch-status"></span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+<script src="{{ url_for('static', filename='client.js') }}"></script>
+</body>
+</html>
