@@ -1,4 +1,4 @@
-# Qubic — Tic Tac Toe 3D (4×4×4) multijugador
+# Tic Tac Toe 3D (4×4×4) multijugador
 
 Version web de tu Tic Tac Toe 3D original (el de Tkinter). Se juega en el
 navegador, en tiempo real, contra otra persona por internet, usando
@@ -61,6 +61,29 @@ probarlo vos mismo antes de invitar a alguien.
 4. Deploy. Cuando termine, Render te da una URL publica
    (`https://tu-app.onrender.com`) — esa es la que compartes con quien
    quieras jugar.
+
+### Version de Python (importante)
+
+`eventlet` todavia no es compatible con Python 3.14, que es lo que Render usa
+por defecto en builds nuevos. El archivo `runtime.txt` de este proyecto fija
+la version a `python-3.12.7`, que si es compatible. Si Render no la respeta
+sola, fijala a mano:
+
+- En el dashboard del servicio → **Environment** → agrega la variable
+  `PYTHON_VERSION` con el valor `3.12.7` → **Save Changes** (esto dispara un
+  redeploy).
+
+Si por algun motivo seguis viendo el error `class uri 'eventlet' invalid or
+not found` despues de fijar la version, la alternativa sin dependencias
+nativas es cambiar el **Start Command** a:
+
+```
+gunicorn --worker-class gthread --threads 4 -w 1 app:app
+```
+
+Esto hace que Socket.IO funcione por *long-polling* en vez de WebSockets
+puros (un poco mas de latencia, imperceptible en un juego por turnos) y no
+depende de `eventlet` en absoluto.
 
 ### Notas importantes sobre Render
 
